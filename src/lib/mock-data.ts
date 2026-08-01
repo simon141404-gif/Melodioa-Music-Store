@@ -37,113 +37,44 @@ const songTitles = [
   'Mood', 'Industry Baby', 'Just Wanna Rock', 'Heat It Up', 'Super Freaky Girl', 'About Damn Time', 'First Class', 'Ghost', 'Enemy', 'Heat Waves',
 ];
 
-// Sample lyrics for demo - each song has unique lyrics
-const sampleLyrics: Record<number, string> = {
-  1: `[Intro]
-Oh, oh, oh
-Oh, oh, oh
-
-[Verse 1]
-I'm blinded by the lights
-No, I can't sleep until I feel your touch
-I'm blinded by the lights
-No, I can't sleep until I feel your touch
-
-[Pre-Chorus]
-I've been tryna call
-I've been on my own for long enough
-Maybe you can show me how to love, maybe
-
-[Chorus]
-I'm blinded by the lights
-No, I can't sleep until I feel your touch
-Hey, hey, hey
-I'm blinded by the lights
-No, I can't sleep until I feel your touch
-
-[Verse 2]
-I said, ooh, I'm blinded by the lights
-No, I can't sleep until I feel your touch
-Hey, hey, hey
-I'm blinded by the lights
-No, I can't sleep until I feel your touch
-
-[Outro]
-Ah, ah, ah`,
-  2: `[Verse 1]
-I saw you dancing in a crowded room
-You look so happy when he's dancing with you
-But it breaks my heart cause I thought that I could make you mine
-I thought that I could make you mine
-
-[Pre-Chorus]
-So don't make it look like we are nothing more
-Than friends when I'm the one who knows you better than you do
-Than you do
-
-[Chorus]
-I saw you dancing with someone new
-I saw you dancing, I saw you
-I saw you dancing with someone new
-And I would never want to be the one to tell you
-What to do, what to do
-So save your tears for another day
-Save your tears for another day
-I'll make you miss me someday`,
-  3: `[Verse 1]
-I have this thing where I get older but just never wiser
-Midnights become my afternoons
-When my depression works the graveyard shift
-All of the people I've ghosted stand there in the room
-
-[Pre-Chorus]
-I should not be left to my own devices
-They come with prices and vices
-I end up in crisis (tale as old as time)
-I wake up screaming from dreaming
-One day I'll watch as you're leaving
-Cause you got tired of my scheming
-
-[Chorus]
-I'm the problem, it's me
-At tea time, it's me
-Everyone agrees, it's me
-I'd stare at ceiling, I'd stare at ceiling
-I'd stare at ceiling`,
-  4: `[Intro]
-The club isn't the best place to find a lover
-So the bar is where I go
-Me and my friends at the table doing shots
-Drinking fast and then we talk slow
-And you come over and start up a conversation with just me
-And trust me I'll give it a chance now
-
-[Chorus]
-Take my hand, stop, put on the rearview mirror and say
-Oh, oh, oh
-I'm in love with the shape of you
-We push and pull like a magnet do
-Although my heart is falling too
-I'm in love with your body`,
-  5: `[Verse 1]
-If you wanna run away with me, I know a galaxy
-And I can take you for a ride
-I had a dream last night that we levitated
-If you wanna run away with me, I know a galaxy
-And I can take you for a ride
-
-[Pre-Chorus]
-I had a dream last night
-We were dancin' in the stars
-I had a dream last night
-We were dancin' in the stars
-Oh, yeah, yeah, yeah
-
-[Chorus]
-If you wanna run away
-I got a spaceship ready for two
-If you wanna run away
-I got a spaceship ready for two`,
+// Sample lyrics for demo - each song has unique time-synced lyrics
+const sampleLyrics: Record<number, any> = {
+  1: [
+    { time: 0, text: "I'm blinded by the lights" },
+    { time: 4, text: "No, I can't sleep until I feel your touch" },
+    { time: 8, text: "I'm blinded by the lights" },
+    { time: 12, text: "No, I can't sleep until I feel your touch" },
+    { time: 16, text: "I've been tryna call" },
+    { time: 19, text: "I've been on my own for long enough" },
+    { time: 23, text: "Maybe you can show me how to love, maybe" },
+    { time: 27, text: "I'm blinded by the lights" },
+    { time: 31, text: "No, I can't sleep until I feel your touch" },
+    { time: 35, text: "Hey, hey, hey" },
+  ],
+  2: [
+    { time: 0, text: "I saw you dancing in a crowded room" },
+    { time: 5, text: "You look so happy when he's dancing with you" },
+    { time: 10, text: "But it breaks my heart cause I thought that I could make you mine" },
+    { time: 16, text: "I thought that I could make you mine" },
+  ],
+  3: [
+    { time: 0, text: "I have this thing where I get older but just never wiser" },
+    { time: 6, text: "Midnights become my afternoons" },
+    { time: 11, text: "When my depression works the graveyard shift" },
+    { time: 16, text: "All of the people I've ghosted stand there in the room" },
+  ],
+  4: [
+    { time: 0, text: "The club isn't the best place to find a lover" },
+    { time: 5, text: "So the bar is where I go" },
+    { time: 9, text: "Me and my friends at the table doing shots" },
+    { time: 14, text: "Drinking fast and then we talk slow" },
+  ],
+  5: [
+    { time: 0, text: "If you wanna run away with me, I know a galaxy" },
+    { time: 5, text: "And I can take you for a ride" },
+    { time: 10, text: "I had a dream last night that we levitated" },
+    { time: 15, text: "If you wanna run away with me" },
+  ],
 };
 
 // Sample audio URLs for demo - using free public domain music
