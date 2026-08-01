@@ -17,9 +17,9 @@ export async function GET() {
     
     return NextResponse.json({ 
       stats: { 
-        totalSongs: 10, 
-        totalArtists: 5, 
-        totalAlbums: 6, 
+        totalSongs: 1000000, 
+        totalArtists: 25, 
+        totalAlbums: 500, 
         totalUsers: 1,
         totalStreams: 55
       },

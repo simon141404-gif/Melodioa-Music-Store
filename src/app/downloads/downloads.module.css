@@ -1,0 +1,154 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
+}
+
+.main {
+  flex: 1;
+  margin-left: 240px;
+  padding: 24px;
+  padding-bottom: 100px;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.header p {
+  color: #b3b3b3;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  color: #b3b3b3;
+}
+
+.empty svg {
+  margin-bottom: 24px;
+  opacity: 0.5;
+}
+
+.empty h2 {
+  font-size: 24px;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.error {
+  text-align: center;
+  padding: 80px 20px;
+  color: #fff;
+}
+
+.downloadList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.downloadItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.downloadItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.cover {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.playOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
+  color: #fff;
+}
+
+.downloadItem:hover .playOverlay {
+  opacity: 1;
+}
+
+.info {
+  flex: 1;
+}
+
+.info h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.info p {
+  font-size: 14px;
+  color: #b3b3b3;
+}
+
+.duration {
+  font-size: 12px;
+  color: #858585;
+}
+
+.removeBtn {
+  background: transparent;
+  border: none;
+  color: #858585;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.removeBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ff5555;
+}
+
+@media (max-width: 768px) {
+  .main {
+    margin-left: 0;
+    padding: 16px;
+    padding-bottom: 100px;
+  }
+}
