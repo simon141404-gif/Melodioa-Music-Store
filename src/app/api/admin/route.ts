@@ -24,10 +24,14 @@ export async function GET() {
         totalStreams: 55
       },
       recentUsers: [],
-      recentStreams: streams.slice(0, 5).map(s => ({
-        ...s,
-        song: mockSongs.find(song => song.id === s.songId)
-      }))
+      recentStreams: streams.slice(0, 5).map(s => {
+        const song = mockSongs.find(song => song.id === s.songId);
+        return {
+          songTitle: song?.title || 'Unknown',
+          artistName: song?.artist?.name || 'Unknown',
+          playedAt: s.createdAt.toISOString()
+        };
+      })
     });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch admin stats' }, { status: 500 });
