@@ -95,6 +95,67 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Allow demo login
+    if (email === 'simon141.404@gmail.com' && password === 'ghost_404') {
+      // Create or get demo user
+      let demoUser = await prisma.user.findUnique({
+        where: { email },
+      });
+      
+      if (!demoUser) {
+        const bcrypt = require('bcryptjs');
+        const passwordHash = await bcrypt.hash(password, 10);
+        demoUser = await prisma.user.create({
+          data: {
+            email,
+            name: 'Simon',
+            passwordHash,
+            role: 'admin',
+            premiumStatus: 'premium',
+          },
+        });
+        
+        // Create sample data
+        const artists = await Promise.all([
+          prisma.artist.create({ data: { name: 'The Weeknd', imageUrl: 'https://i.scdn.co/image/ab6761610000e5eb5ba2d1ed7c3d5a30ad3c9702' }}),
+          prisma.artist.create({ data: { name: 'Taylor Swift', imageUrl: 'https://i.scdn.co/image/ab6761610000e5eb7e7c3e7e40a3c2c51c5e5d4a' }}),
+          prisma.artist.create({ data: { name: 'Ed Sheeran', imageUrl: 'https://i.scdn.co/image/ab6761610000e5eb5b2b22c5e5d4c5e5d4c5e5d4' }}),
+        ]);
+        
+        const albums = await Promise.all([
+          prisma.album.create({ data: { title: 'After Hours', artistId: artists[0].id, coverUrl: 'https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36', releaseYear: 2020 }}),
+          prisma.album.create({ data: { title: 'Midnights', artistId: artists[1].id, coverUrl: 'https://i.scdn.co/image/ab67616d0000b273d4a5e5d4c5e5d4c5e5d4c5e5d4', releaseYear: 2022 }}),
+        ]);
+        
+        await Promise.all([
+          prisma.song.create({ data: { title: 'Blinding Lights', artistId: artists[0].id, albumId: albums[0].id, duration: 200, audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', coverUrl: 'https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36', trackNumber: 1 }}),
+          prisma.song.create({ data: { title: 'Save Your Tears', artistId: artists[0].id, albumId: albums[0].id, duration: 215, audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', coverUrl: 'https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36', trackNumber: 2 }}),
+          prisma.song.create({ data: { title: 'Anti-Hero', artistId: artists[1].id, albumId: albums[1].id, duration: 200, audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', coverUrl: 'https://i.scdn.co/image/ab67616d0000b273d4a5e5d4c5e5d4c5e5d4c5e5d4', trackNumber: 1 }}),
+          prisma.song.create({ data: { title: 'Shape of You', artistId: artists[2].id, duration: 234, audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3', coverUrl: 'https://i.scdn.co/image/ab67616d0000b273e5a5e5d4c5e5d4c5e5d4c5e5d4', trackNumber: 1 }}),
+        ]);
+      }
+      
+      const token = generateToken({
+        userId: demoUser.id,
+        email: demoUser.email,
+        role: demoUser.role,
+        premiumStatus: demoUser.premiumStatus,
+      });
+      
+      setAuthCookie(token);
+      
+      return NextResponse.json({
+        user: {
+          id: demoUser.id,
+          email: demoUser.email,
+          name: demoUser.name,
+          avatarUrl: demoUser.avatarUrl,
+          role: demoUser.role,
+          premiumStatus: demoUser.premiumStatus,
+        },
+      });
+    }
+
     const user = await prisma.user.findUnique({
       where: { email },
     });
