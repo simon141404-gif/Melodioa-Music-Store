@@ -1,13 +1,19 @@
 export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
-import { mockSongs } from '@/lib/mock-data';
+import { getSongs } from '@/lib/mock-data';
 
 export async function GET(request: NextRequest) {
   try {
-    // Shuffle songs for recommendations
-    const shuffled = [...mockSongs].sort(() => Math.random() - 0.5);
-    return NextResponse.json({ songs: shuffled.slice(0, 10) });
+    // Get songs for recommendations
+    const songs = getSongs(1, 20);
+    
+    return NextResponse.json({ 
+      madeForYou: songs.slice(0, 10),
+      topCharts: songs.slice(5, 15),
+      recentlyPlayed: songs.slice(10, 20)
+    });
   } catch (error) {
+    console.error('Recommendations error:', error);
     return NextResponse.json({ error: 'Failed to fetch recommendations' }, { status: 500 });
   }
 }
