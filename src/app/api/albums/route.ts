@@ -1,4 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+
+// Dynamic route - don't pre-render
+export const dynamic = 'force-dynamic';
+
 import prisma from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
 
