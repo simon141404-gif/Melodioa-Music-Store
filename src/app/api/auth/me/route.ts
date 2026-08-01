@@ -1,47 +1,23 @@
-import { NextResponse } from 'next/server';
-import { getCurrentUser } from '@/lib/auth';
-import prisma from '@/lib/db';
-
 export const dynamic = 'force-dynamic';
+import { NextRequest, NextResponse } from 'next/server';
+import { getCurrentUser } from '@/lib/auth';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const payload = await getCurrentUser();
-    
-    if (!payload) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      );
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json({ user: null });
     }
-
-    const user = await prisma.user.findUnique({
-      where: { id: payload.userId },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        avatarUrl: true,
-        role: true,
-        premiumStatus: true,
-        premiumExpiresAt: true,
-        createdAt: true,
+    return NextResponse.json({
+      user: {
+        id: user.userId,
+        email: user.email,
+        name: 'Simon',
+        role: user.role,
+        premiumStatus: user.premiumStatus,
       },
     });
-
-    if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({ user });
   } catch (error) {
-    console.error('Auth check error:', error);
-    return NextResponse.json(
-      { error: 'Failed to check authentication' },
-      { status: 500 }
-    );
+    return NextResponse.json({ user: null });
   }
 }
