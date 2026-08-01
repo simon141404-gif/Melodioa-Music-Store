@@ -1,0 +1,197 @@
+.card {
+  display: grid;
+  grid-template-columns: 48px 1fr 1fr 48px 48px 48px;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.card:hover {
+  background: var(--bg-tertiary);
+}
+
+.card.playing {
+  background: var(--bg-tertiary);
+}
+
+.card.playing .title {
+  color: var(--accent-primary);
+}
+
+.index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 24px;
+  position: relative;
+}
+
+.indexNum {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.playBtn {
+  position: absolute;
+  opacity: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  transition: all var(--transition-fast);
+}
+
+.card:hover .playBtn {
+  opacity: 1;
+}
+
+.card:hover .indexNum {
+  opacity: 0;
+}
+
+.playBtn:hover {
+  transform: scale(1.1);
+}
+
+.playingIndicator {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 16px;
+}
+
+.playingIndicator span {
+  width: 3px;
+  background: var(--accent-primary);
+  border-radius: 1px;
+  animation: bars 0.8s ease-in-out infinite;
+}
+
+.playingIndicator span:nth-child(1) { height: 60%; animation-delay: 0s; }
+.playingIndicator span:nth-child(2) { height: 100%; animation-delay: 0.2s; }
+.playingIndicator span:nth-child(3) { height: 40%; animation-delay: 0.4s; }
+
+@keyframes bars {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.5); }
+}
+
+.artwork {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.artworkImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artworkOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.title {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.artist {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.album {
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.likeBtn,
+.moreBtn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+  opacity: 0;
+}
+
+.card:hover .likeBtn,
+.card:hover .moreBtn {
+  opacity: 1;
+}
+
+.likeBtn:hover {
+  color: #ef4444;
+}
+
+.moreBtn:hover {
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+}
+
+.duration {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 0.8125rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .card {
+    grid-template-columns: 40px 1fr auto;
+  }
+  
+  .album,
+  .likeBtn,
+  .duration,
+  .moreBtn,
+  .index {
+    display: none;
+  }
+  
+  .artwork {
+    width: 40px;
+    height: 40px;
+  }
+}

@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
+  passwordHash   String   @map("password_hash")
+  name           String
+  avatarUrl      String?  @map("avatar_url")
+  role           String   @default("user")
+  premiumStatus  String   @default("free")
+  premiumExpiresAt DateTime? @map("premium_expires_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  
+  playlists      Playlist[]
+  likes          Like[]
+  downloads      Download[]
+  streams        Stream[]
+  notifications  Notification[]
+  followedArtists Follow[] @relation("UserFollows")
+  
+  @@map("users")
+}
+
+model Artist {
+  id        Int      @id @default(autoincrement())
+  userId    Int?     @unique @map("user_id")
+  name      String
+  bio       String?
+  imageUrl  String?  @map("image_url")
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  albums    Album[]
+  follows   Follow[] @relation("ArtistFollowers")
+  
+  @@map("artists")
+}
+
+model Album {
+  id          Int      @id @default(autoincrement())
+  artistId    Int      @map("artist_id")
+  title       String
+  coverUrl    String?  @map("cover_url")
+  releaseYear Int      @map("release_year")
+  genre       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  artist      Artist   @relation(fields: [artistId], references: [id])
+  songs       Song[]
+  
+  @@map("albums")
+}
+
+model Song {
+  id           Int       @id @default(autoincrement())
+  albumId      Int       @map("album_id")
+  title        String
+  audioUrl     String?   @map("audio_url")
+  duration     Int       @default(0)
+  trackNumber  Int?      @map("track_number")
+  lyrics       String?
+  plays        Int       @default(0)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  
+  album        Album     @relation(fields: [albumId], references: [id])
+  playlistSongs PlaylistSong[]
+  likes        Like[]
+  downloads    Download[]
+  streams      Stream[]
+  
+  @@map("songs")
+}
+
+model Playlist {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  title       String
+  description String?
+  coverUrl    String?  @map("cover_url")
+  isPublic    Boolean  @default(true) @map("is_public")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  user        User     @relation(fields: [userId], references: [id])
+  songs       PlaylistSong[]
+  
+  @@map("playlists")
+}
+
+model PlaylistSong {
+  id         Int      @id @default(autoincrement())
+  playlistId Int      @map("playlist_id")
+  songId     Int      @map("song_id")
+  position   Int      @default(0)
+  
+  playlist   Playlist @relation(fields: [playlistId], references: [id])
+  song       Song     @relation(fields: [songId], references: [id])
+  
+  @@unique([playlistId, songId])
+  @@map("playlist_songs")
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  songId    Int      @map("song_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  user      User     @relation(fields: [userId], references: [id])
+  song      Song     @relation(fields: [songId], references: [id])
+  
+  @@unique([userId, songId])
+  @@map("likes")
+}
+
+model Follow {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  artistId  Int      @map("artist_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  user      User     @relation("UserFollows", fields: [userId], references: [id])
+  artist    Artist   @relation("ArtistFollowers", fields: [artistId], references: [id])
+  
+  @@unique([userId, artistId])
+  @@map("follows")
+}
+
+model Download {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  songId      Int      @map("song_id")
+  downloadedAt DateTime @default(now()) @map("downloaded_at")
+  
+  user        User     @relation(fields: [userId], references: [id])
+  song        Song     @relation(fields: [songId], references: [id])
+  
+  @@unique([userId, songId])
+  @@map("downloads")
+}
+
+model Stream {
+  id        Int      @id @default(autoincrement())
+  userId    Int?     @map("user_id")
+  songId    Int      @map("song_id")
+  playedAt  DateTime @default(now()) @map("played_at")
+  
+  user      User?    @relation(fields: [userId], references: [id])
+  song      Song     @relation(fields: [songId], references: [id])
+  
+  @@map("streams")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  type      String
+  message   String
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  user      User     @relation(fields: [userId], references: [id])
+  
+  @@map("notifications")
+}

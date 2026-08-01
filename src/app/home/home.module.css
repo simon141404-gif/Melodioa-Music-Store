@@ -1,0 +1,306 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  margin-left: 240px;
+  padding-bottom: 120px;
+  background: var(--bg-primary);
+}
+
+.content {
+  padding: var(--space-8);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Header */
+.header {
+  margin-bottom: var(--space-8);
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* Quick Play */
+.quickPlay {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-10);
+}
+
+.quickCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, #ec4899 100%);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.quickCard:hover {
+  transform: scale(1.02);
+}
+
+.quickIcon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  color: white;
+}
+
+.quickCard span {
+  font-weight: 600;
+  color: white;
+  font-size: 1rem;
+}
+
+/* Sections */
+.section {
+  margin-bottom: var(--space-10);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+}
+
+.sectionHeader h2 {
+  font-size: 1.5rem;
+}
+
+.seeAll {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.seeAll:hover {
+  color: var(--text-primary);
+}
+
+/* Card Grids */
+.albumGrid,
+.playlistGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-6);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-4);
+}
+
+/* Recommendation Card */
+.recommendationCard {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.recommendationCard:hover {
+  background: var(--bg-tertiary);
+}
+
+.recImage {
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-elevated));
+  position: relative;
+}
+
+.playOverlay {
+  position: absolute;
+  bottom: var(--space-2);
+  right: var(--space-2);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-primary);
+  color: white;
+  border-radius: var(--radius-full);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: all var(--transition-fast);
+}
+
+.recommendationCard:hover .playOverlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.recInfo {
+  padding: var(--space-3);
+}
+
+.recTitle {
+  display: block;
+  font-weight: 600;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: var(--space-1);
+}
+
+.recArtist {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Chart List */
+.chartList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.chartItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.chartItem:hover {
+  background: var(--bg-tertiary);
+}
+
+.chartIndex {
+  width: 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.chartArt {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-elevated));
+  border-radius: var(--radius-sm);
+}
+
+.chartInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.chartTitle {
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+
+.chartArtist {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+/* Genre Grid */
+.genreGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-4);
+}
+
+.genreCard {
+  aspect-ratio: 2/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.genreCard:hover {
+  background: var(--bg-tertiary);
+  transform: scale(1.02);
+}
+
+@media (max-width: 1024px) {
+  .main {
+    margin-left: 72px;
+  }
+  
+  .albumGrid,
+  .playlistGrid,
+  .cardGrid,
+  .genreGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .quickPlay {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .main {
+    margin-left: 0;
+  }
+  
+  .content {
+    padding: var(--space-4);
+  }
+  
+  .albumGrid,
+  .playlistGrid,
+  .cardGrid,
+  .genreGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .quickPlay {
+    grid-template-columns: 1fr;
+  }
+  
+  .header h1 {
+    font-size: 1.5rem;
+  }
+}

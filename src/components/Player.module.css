@@ -1,0 +1,441 @@
+.player {
+  height: 90px;
+  background: var(--player-bg);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border-color);
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: center;
+  padding: 0 var(--space-6);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.emptyPlayer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* Song Info */
+.songInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.artwork {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.artworkImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.playingBars {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 12px;
+}
+
+.playingBars span {
+  width: 3px;
+  background: var(--accent-primary);
+  border-radius: 1px;
+  animation: bars 0.8s ease-in-out infinite;
+}
+
+.playingBars span:nth-child(1) { height: 60%; animation-delay: 0s; }
+.playingBars span:nth-child(2) { height: 100%; animation-delay: 0.2s; }
+.playingBars span:nth-child(3) { height: 40%; animation-delay: 0.4s; }
+
+@keyframes bars {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.5); }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.artist {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.actionBtn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.actionBtn:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.actionBtn.liked {
+  color: #ef4444;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.mainControls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.controlBtn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.controlBtn:hover {
+  color: var(--text-primary);
+}
+
+.controlBtn.active {
+  color: var(--accent-primary);
+}
+
+.playBtn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  transition: all var(--transition-fast);
+}
+
+.playBtn:hover {
+  transform: scale(1.05);
+}
+
+.playBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--bg-primary);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 600px;
+}
+
+.time {
+  font-size: 0.6875rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+  min-width: 40px;
+}
+
+.progressBar {
+  flex: 1;
+  height: 4px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  position: relative;
+}
+
+.progressBar:hover {
+  height: 6px;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--text-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.1s linear;
+}
+
+.progressHandle {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: var(--text-primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.progressBar:hover .progressHandle {
+  opacity: 1;
+}
+
+/* Extra Controls */
+.extra {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.volumeControl {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.volumeSlider {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--space-4);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-2);
+}
+
+.volumeSlider .progressBar {
+  width: 100px;
+  height: 4px;
+}
+
+/* Expanded Player */
+.expandedPlayer {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-primary);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expandedContent {
+  width: 100%;
+  max-width: 900px;
+  padding: var(--space-8);
+  position: relative;
+}
+
+.collapseBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.collapseBtn:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.expandedMain {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-12);
+  align-items: center;
+}
+
+.expandedArtwork {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.playingIndicator {
+  position: absolute;
+  bottom: var(--space-6);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-end;
+  height: 24px;
+}
+
+.playingIndicator span {
+  width: 6px;
+  background: var(--accent-primary);
+  border-radius: 2px;
+  animation: bars 0.8s ease-in-out infinite;
+}
+
+.playingIndicator span:nth-child(1) { height: 60%; animation-delay: 0s; }
+.playingIndicator span:nth-child(2) { height: 100%; animation-delay: 0.2s; }
+.playingIndicator span:nth-child(3) { height: 40%; animation-delay: 0.4s; }
+
+.expandedInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.expandedTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.expandedArtist {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+}
+
+.expandedProgress {
+  margin-top: var(--space-4);
+}
+
+.expandedProgress .progressBar {
+  height: 6px;
+}
+
+.timeDisplay {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.expandedControls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.expandedControls .controlBtn {
+  width: 48px;
+  height: 48px;
+}
+
+.expandedControls .playBtn {
+  width: 64px;
+  height: 64px;
+}
+
+.expandedActions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.expandedActions .actionBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+}
+
+@media (max-width: 768px) {
+  .player {
+    grid-template-columns: 1fr 1fr;
+    padding: 0 var(--space-4);
+  }
+  
+  .extra {
+    display: none;
+  }
+  
+  .expandedMain {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  
+  .expandedArtwork {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .expandedTitle {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  
+  .expandedArtist {
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .expandedControls {
+    justify-content: center;
+  }
+  
+  .expandedActions {
+    justify-content: center;
+  }
+}
