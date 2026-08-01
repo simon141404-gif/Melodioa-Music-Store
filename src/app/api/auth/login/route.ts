@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     // Demo login - works without database
     if (email === 'simon141.404@gmail.com' && password === 'ghost_404') {
       const token = generateToken({
-        userId: 'demo-user-123',
+        userId: 1,
         email: 'simon141.404@gmail.com',
         role: 'admin',
         premiumStatus: 'premium',
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       
       return NextResponse.json({
         user: {
-          id: 'demo-user-123',
+          id: 1,
           email: 'simon141.404@gmail.com',
           name: 'Simon',
           avatarUrl: null,
