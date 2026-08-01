@@ -104,10 +104,12 @@ export default function Sidebar() {
           <span>Settings</span>
         </Link>
 
-        <button onClick={logout} className={styles.navLink}>
-          <LogOut className={styles.navIcon} />
-          <span>Log Out</span>
-        </button>
+        {user && (
+          <button onClick={logout} className={styles.navLink}>
+            <LogOut className={styles.navIcon} />
+            <span>Log Out</span>
+          </button>
+        )}
 
         {user && (
           <div className={styles.userInfo}>

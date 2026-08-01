@@ -111,8 +111,11 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     setCurrentTime(0);
     
     if (audioRef.current) {
-      // Use the song's audioUrl with fallback
-      audioRef.current.src = song.audioUrl || DEFAULT_AUDIO;
+      // Add cache-busting query parameter to ensure fresh audio
+      const audioSrc = song.audioUrl || DEFAULT_AUDIO;
+      const separator = audioSrc.includes('?') ? '&' : '?';
+      const cacheBuster = `${separator}_t=${Date.now()}`;
+      audioRef.current.src = audioSrc + cacheBuster;
       audioRef.current.load();
       audioRef.current.play().catch(console.error);
       setIsPlaying(true);
