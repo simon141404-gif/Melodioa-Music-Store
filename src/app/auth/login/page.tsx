@@ -93,7 +93,7 @@ export default function LoginPage() {
           </form>
 
           <p className={styles.switchAuth}>
-            Don't have an account? <Link href="/auth/register">Sign up</Link>
+            Do not have an account? <Link href="/auth/register">Sign up</Link>
           </p>
         </div>
       </div>

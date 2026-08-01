@@ -120,7 +120,7 @@ export default function SearchPage() {
             </div>
           ) : !hasResults && query.length >= 2 ? (
             <div className={styles.empty}>
-              <p>No results found for "{query}"</p>
+              <p>No results found for &quot;{query}&quot;</p>
             </div>
           ) : query.length < 2 ? (
             <div className={styles.empty}>

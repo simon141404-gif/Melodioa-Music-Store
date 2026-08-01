@@ -247,7 +247,7 @@ export default function SettingsPage() {
             ) : (
               <div className={styles.deleteConfirm}>
                 <h3>Final Confirmation</h3>
-                <p>To confirm deletion, type <strong>"{user?.name || 'delete'}"</strong> below:</p>
+                <p>To confirm deletion, type <strong>&quot;{user?.name || 'delete'}&quot;</strong> below:</p>
                 <input
                   type="text"
                   value={deleteConfirmText}
