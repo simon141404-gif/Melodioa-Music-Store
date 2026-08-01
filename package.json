@@ -2,6 +2,7 @@
   "name": "melodia",
   "version": "1.0.0",
   "description": "Melodia - Music Streaming Platform",
+  "author": "Shawon Haque",
   "private": true,
   "engines": {
     "node": ">=18.0.0"

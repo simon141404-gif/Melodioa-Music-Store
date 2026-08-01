@@ -195,7 +195,7 @@ export default function LandingPage() {
           </div>
         </div>
         <div className={styles.footerBottom}>
-          <p>&copy; 2024 Melodia. All rights reserved.</p>
+          <p>&copy; 2026 Shawon Haque. All rights reserved.</p>
         </div>
       </footer>
     </div>

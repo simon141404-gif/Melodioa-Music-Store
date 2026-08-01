@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   keywords: ['music streaming', 'online music', 'music player', 'playlist', 'podcasts', 'free music', 'premium music'],
   authors: [{ name: 'Shawon Haque' }],
   creator: 'Shawon Haque',
-  publisher: 'Melodia',
+  publisher: 'Shawon Haque',
   metadataBase: new URL('https://melodioa-music-store.vercel.app'),
   openGraph: {
     type: 'website',

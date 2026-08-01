@@ -109,12 +109,14 @@ Output directory: `.next`
 
 ## 📄 License
 
+Copyright © 2026 Shawon Haque. All Rights Reserved.
+
 MIT License - feel free to use this project for learning or commercial purposes.
 
 ---
 
 <div align="center">
 
-**Made with ❤️ by Simon**
+**Made with ❤️ by Shawon Haque**
 
 </div>

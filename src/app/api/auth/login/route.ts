@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
         user: {
           id: 1,
           email: 'simon141.404@gmail.com',
-          name: 'Simon',
+          name: 'Shawon Haque',
           avatarUrl: null,
           role: 'admin',
           premiumStatus: 'premium',

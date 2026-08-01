@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
       user: {
         id: user.userId,
         email: user.email,
-        name: 'Simon',
+        name: 'Shawon Haque',
         role: user.role,
         premiumStatus: user.premiumStatus,
       },

@@ -124,7 +124,7 @@ export default function Sidebar() {
         )}
         
         <div className={styles.footer}>
-          <p>© 2024 Melodia. All rights reserved.</p>
+          <p>© 2026 Shawon Haque. All rights reserved.</p>
           <p>Created by Shawon Haque</p>
         </div>
       </div>
