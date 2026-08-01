@@ -96,10 +96,6 @@ export default function LoginPage() {
             Don't have an account? <Link href="/auth/register">Sign up</Link>
           </p>
         </div>
-
-        <p className={styles.demoCredentials}>
-          Demo: user@melodia.com / password123
-        </p>
       </div>
     </div>
   );
