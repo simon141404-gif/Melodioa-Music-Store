@@ -22,6 +22,15 @@ export default function SearchPage() {
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
+    // Get initial query from URL
+    const params = new URLSearchParams(window.location.search);
+    const initialQuery = params.get('q') || '';
+    if (initialQuery) {
+      setQuery(initialQuery);
+    }
+  }, []);
+
+  useEffect(() => {
     const search = async () => {
       if (query.length < 2) {
         setResults({ songs: [], artists: [], albums: [], playlists: [] });
@@ -32,7 +41,12 @@ export default function SearchPage() {
       try {
         const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
         const data = await res.json();
-        setResults(data);
+        setResults({
+          songs: data.songs || [],
+          artists: data.artists || [],
+          albums: data.albums || [],
+          playlists: data.playlists || []
+        });
       } catch (error) {
         console.error('Search failed:', error);
       } finally {
