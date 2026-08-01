@@ -9,12 +9,14 @@ import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import styles from './settings.module.css';
 
-type SettingsTab = 'account' | 'playback' | 'notifications' | 'appearance' | 'privacy' | 'subscription';
+type SettingsTab = 'account' | 'playback' | 'notifications' | 'appearance' | 'privacy' | 'subscription' | 'delete';
 
 export default function SettingsPage() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [activeTab, setActiveTab] = useState<SettingsTab | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
   
   // Form states
   const [name, setName] = useState(user?.name || '');
@@ -210,6 +212,76 @@ export default function SettingsPage() {
           </div>
         );
 
+      case 'delete':
+        return (
+          <div className={styles.tabContent}>
+            <div className={styles.tabHeader}>
+              <h2>Delete Account</h2>
+              <button className={styles.closeBtn} onClick={() => setActiveTab(null)}>
+                <X size={24} />
+              </button>
+            </div>
+            {!showDeleteConfirm ? (
+              <div className={styles.deleteWarning}>
+                <div className={styles.warningIcon}>⚠️</div>
+                <h3>Are you sure you want to delete your account?</h3>
+                <p>This action cannot be undone. All your data, playlists, likes, and preferences will be permanently deleted.</p>
+                <div className={styles.deleteConsequences}>
+                  <h4>This will delete:</h4>
+                  <ul>
+                    <li>Your profile and account</li>
+                    <li>All your playlists</li>
+                    <li>All liked songs</li>
+                    <li>Listening history</li>
+                    <li>Downloaded music</li>
+                    <li>Subscription details</li>
+                  </ul>
+                </div>
+                <button 
+                  className={styles.dangerBtnLarge}
+                  onClick={() => setShowDeleteConfirm(true)}
+                >
+                  Delete My Account
+                </button>
+              </div>
+            ) : (
+              <div className={styles.deleteConfirm}>
+                <h3>Final Confirmation</h3>
+                <p>To confirm deletion, type <strong>"{user?.name || 'delete'}"</strong> below:</p>
+                <input
+                  type="text"
+                  value={deleteConfirmText}
+                  onChange={(e) => setDeleteConfirmText(e.target.value)}
+                  placeholder='Type "delete" to confirm'
+                  className={styles.deleteInput}
+                />
+                <div className={styles.deleteActions}>
+                  <button 
+                    className={styles.cancelBtn}
+                    onClick={() => {
+                      setShowDeleteConfirm(false);
+                      setDeleteConfirmText('');
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    className={styles.confirmDeleteBtn}
+                    disabled={deleteConfirmText.toLowerCase() !== 'delete'}
+                    onClick={() => {
+                      alert('Account deleted successfully! Redirecting to home...');
+                      logout();
+                      window.location.href = '/';
+                    }}
+                  >
+                    Confirm Delete
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+
       default:
         return null;
     }
@@ -326,12 +398,24 @@ export default function SettingsPage() {
               <section className={styles.section}>
                 <h2>Danger Zone</h2>
                 <div className={styles.card}>
-                  <div className={styles.dangerItem}>
+                  <div 
+                    className={styles.dangerItem} 
+                    onClick={() => setActiveTab('delete')}
+                    style={{ cursor: 'pointer' }}
+                  >
                     <div className={styles.settingInfo}>
                       <span className={styles.settingLabel}>Delete Account</span>
                       <span className={styles.settingDesc}>Permanently delete your account and all data</span>
                     </div>
-                    <button className={styles.dangerBtn}>Delete Account</button>
+                    <button 
+                      className={styles.dangerBtn}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveTab('delete');
+                      }}
+                    >
+                      Delete Account
+                    </button>
                   </div>
                 </div>
               </section>
