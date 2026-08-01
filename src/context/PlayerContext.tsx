@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useRef, useEffect, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, useState, useRef, useEffect, ReactNode, useCallback, useMemo } from 'react';
 import { Song, QueueItem, RepeatMode } from '@/types';
 
 // Default sample audio for fallback
@@ -18,6 +18,10 @@ interface PlayerContextType {
   repeat: RepeatMode;
   isExpanded: boolean;
   isLoading: boolean;
+  playbackSpeed: number;
+  showLyrics: boolean;
+  showQueue: boolean;
+  visualizerData: number[];
   
   playSong: (song: Song) => void;
   playSongs: (songs: Song[], startIndex?: number) => void;
@@ -30,11 +34,15 @@ interface PlayerContextType {
   setVolume: (volume: number) => void;
   toggleShuffle: () => void;
   toggleRepeat: () => void;
+  setPlaybackSpeed: (speed: number) => void;
   addToQueue: (song: Song) => void;
   removeFromQueue: (index: number) => void;
   clearQueue: () => void;
   playFromQueue: (index: number) => void;
   toggleExpand: () => void;
+  toggleLyrics: () => void;
+  toggleQueue: () => void;
+  moveQueueItem: (fromIndex: number, toIndex: number) => void;
 }
 
 const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
@@ -52,12 +60,27 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const [repeat, setRepeat] = useState<RepeatMode>('off');
   const [isExpanded, setIsExpanded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [playbackSpeed, setPlaybackSpeedState] = useState(1);
+  const [showLyrics, setShowLyrics] = useState(false);
+  const [showQueue, setShowQueue] = useState(false);
+  const [visualizerData, setVisualizerData] = useState<number[]>(Array(64).fill(0));
   const shuffleIndicesRef = useRef<number[]>([]);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const animationFrameRef = useRef<number>(0);
 
   useEffect(() => {
     audioRef.current = new Audio();
     audioRef.current.volume = volume;
     
+    // Set up Web Audio API for visualizer
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const source = audioContext.createMediaElementSource(audioRef.current);
+    const analyser = audioContext.createAnalyser();
+    analyser.fftSize = 128;
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+    analyserRef.current = analyser;
+
     const audio = audioRef.current;
     
     const onTimeUpdate = () => setCurrentTime(audio.currentTime);
@@ -79,14 +102,51 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       audio.removeEventListener('loadstart', onLoadStart);
       audio.removeEventListener('canplay', onCanPlay);
       audio.pause();
+      audioContext.close();
+      cancelAnimationFrame(animationFrameRef.current);
     };
   }, []);
+
+  // Visualizer animation
+  useEffect(() => {
+    if (!analyserRef.current || !isPlaying) {
+      setVisualizerData(Array(64).fill(0));
+      return;
+    }
+
+    const updateVisualizer = () => {
+      if (!analyserRef.current) return;
+      
+      const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
+      analyserRef.current.getByteFrequencyData(dataArray);
+      
+      // Normalize and smooth the data
+      const normalized = Array.from(dataArray).map(v => v / 255);
+      setVisualizerData(normalized);
+      
+      if (isPlaying) {
+        animationFrameRef.current = requestAnimationFrame(updateVisualizer);
+      }
+    };
+
+    updateVisualizer();
+
+    return () => {
+      cancelAnimationFrame(animationFrameRef.current);
+    };
+  }, [isPlaying]);
 
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
     }
   }, [volume]);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.playbackRate = playbackSpeed;
+    }
+  }, [playbackSpeed]);
 
   const handleEnded = useCallback(() => {
     if (repeat === 'one') {
@@ -111,7 +171,6 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     setCurrentTime(0);
     
     if (audioRef.current) {
-      // Add cache-busting query parameter to ensure fresh audio
       const audioSrc = song.audioUrl || DEFAULT_AUDIO;
       const separator = audioSrc.includes('?') ? '&' : '?';
       const cacheBuster = `${separator}_t=${Date.now()}`;
@@ -121,7 +180,6 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       setIsPlaying(true);
     }
     
-    // Record stream
     fetch('/api/streams', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -197,7 +255,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     
     playFromQueue(nextIndex);
   }, [queue, queueIndex, shuffle]);
-
+  
   const previous = useCallback(() => {
     if (queue.length === 0) return;
     
@@ -231,6 +289,13 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       if (prev === 'all') return 'one';
       return 'off';
     });
+  }, []);
+
+  const setPlaybackSpeed = useCallback((speed: number) => {
+    setPlaybackSpeedState(speed);
+    if (audioRef.current) {
+      audioRef.current.playbackRate = speed;
+    }
   }, []);
 
   const addToQueue = useCallback((song: Song) => {
@@ -267,38 +332,78 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     setIsExpanded(prev => !prev);
   }, []);
 
+  const toggleLyrics = useCallback(() => {
+    setShowLyrics(prev => !prev);
+    if (showLyrics) setShowQueue(false);
+  }, [showLyrics]);
+
+  const toggleQueue = useCallback(() => {
+    setShowQueue(prev => !prev);
+    if (showQueue) setShowLyrics(false);
+  }, [showQueue]);
+
+  const moveQueueItem = useCallback((fromIndex: number, toIndex: number) => {
+    setQueue(prev => {
+      const newQueue = [...prev];
+      const [removed] = newQueue.splice(fromIndex, 1);
+      newQueue.splice(toIndex, 0, removed);
+      return newQueue;
+    });
+    if (fromIndex === queueIndex) {
+      setQueueIndex(toIndex);
+    } else if (fromIndex < queueIndex && toIndex >= queueIndex) {
+      setQueueIndex(queueIndex - 1);
+    } else if (fromIndex > queueIndex && toIndex <= queueIndex) {
+      setQueueIndex(queueIndex + 1);
+    }
+  }, [queueIndex]);
+
+  const contextValue = useMemo(() => ({
+    currentSong,
+    isPlaying,
+    currentTime,
+    duration,
+    volume,
+    queue,
+    queueIndex,
+    shuffle,
+    repeat,
+    isExpanded,
+    isLoading,
+    playbackSpeed,
+    showLyrics,
+    showQueue,
+    visualizerData,
+    playSong,
+    playSongs,
+    togglePlay,
+    pause,
+    play,
+    next,
+    previous,
+    seek,
+    setVolume,
+    toggleShuffle,
+    toggleRepeat,
+    setPlaybackSpeed,
+    addToQueue,
+    removeFromQueue,
+    clearQueue,
+    playFromQueue,
+    toggleExpand,
+    toggleLyrics,
+    toggleQueue,
+    moveQueueItem,
+  }), [
+    currentSong, isPlaying, currentTime, duration, volume, queue, queueIndex, 
+    shuffle, repeat, isExpanded, isLoading, playbackSpeed, showLyrics, showQueue,
+    visualizerData, playSong, playSongs, togglePlay, pause, play, next, previous,
+    seek, setVolume, toggleShuffle, toggleRepeat, addToQueue, removeFromQueue,
+    clearQueue, playFromQueue, toggleExpand, moveQueueItem
+  ]);
+
   return (
-    <PlayerContext.Provider
-      value={{
-        currentSong,
-        isPlaying,
-        currentTime,
-        duration,
-        volume,
-        queue,
-        queueIndex,
-        shuffle,
-        repeat,
-        isExpanded,
-        isLoading,
-        playSong,
-        playSongs,
-        togglePlay,
-        pause,
-        play,
-        next,
-        previous,
-        seek,
-        setVolume,
-        toggleShuffle,
-        toggleRepeat,
-        addToQueue,
-        removeFromQueue,
-        clearQueue,
-        playFromQueue,
-        toggleExpand,
-      }}
-    >
+    <PlayerContext.Provider value={contextValue}>
       {children}
     </PlayerContext.Provider>
   );

@@ -34,17 +34,20 @@ export interface Album {
 }
 
 export interface Song {
-  id: number;
-  albumId: number;
+  id: string | number;
+  albumId?: number;
   title: string;
   audioUrl?: string;
   duration: number;
   trackNumber?: number;
-  lyrics?: string;
+  lyrics?: any;
   plays: number;
   album?: Album;
   artist?: Artist;
   isLiked?: boolean;
+  coverUrl?: string;
+  genre?: string;
+  releaseDate?: string;
 }
 
 export interface Playlist {
