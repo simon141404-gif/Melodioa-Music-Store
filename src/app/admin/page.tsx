@@ -18,7 +18,13 @@ interface Stats {
 
 export default function AdminPage() {
   const { user } = useAuth();
-  const [stats, setStats] = useState<Stats | null>(null);
+  const [stats, setStats] = useState<Stats>({
+    totalUsers: 0,
+    totalArtists: 0,
+    totalAlbums: 0,
+    totalSongs: 0,
+    totalStreams: 0
+  });
   const [recentUsers, setRecentUsers] = useState<any[]>([]);
   const [recentStreams, setRecentStreams] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,9 +37,17 @@ export default function AdminPage() {
     try {
       const res = await fetch('/api/admin');
       const data = await res.json();
-      setStats(data.stats);
-      setRecentUsers(data.recentUsers);
-      setRecentStreams(data.recentStreams);
+      if (data.stats) {
+        setStats({
+          totalUsers: data.stats.totalUsers || 0,
+          totalArtists: data.stats.totalArtists || 0,
+          totalAlbums: data.stats.totalAlbums || 0,
+          totalSongs: data.stats.totalSongs || 0,
+          totalStreams: data.stats.totalStreams || 0
+        });
+      }
+      setRecentUsers(data.recentUsers || []);
+      setRecentStreams(data.recentStreams || []);
     } catch (error) {
       console.error('Failed to fetch admin data:', error);
     } finally {
@@ -75,11 +89,11 @@ export default function AdminPage() {
   }
 
   const statCards = [
-    { icon: Users, label: 'Total Users', value: stats?.totalUsers || 0, color: '#7c3aed' },
-    { icon: Music, label: 'Total Artists', value: stats?.totalArtists || 0, color: '#ec4899' },
-    { icon: Disc, label: 'Total Albums', value: stats?.totalAlbums || 0, color: '#10b981' },
-    { icon: Radio, label: 'Total Songs', value: stats?.totalSongs || 0, color: '#f59e0b' },
-    { icon: Play, label: 'Total Streams', value: stats?.totalStreams || 0, color: '#3b82f6' },
+    { icon: Users, label: 'Total Users', value: stats.totalUsers, color: '#7c3aed' },
+    { icon: Music, label: 'Total Artists', value: stats.totalArtists, color: '#ec4899' },
+    { icon: Disc, label: 'Total Albums', value: stats.totalAlbums, color: '#10b981' },
+    { icon: Radio, label: 'Total Songs', value: stats.totalSongs, color: '#f59e0b' },
+    { icon: Play, label: 'Total Streams', value: stats.totalStreams, color: '#3b82f6' },
   ];
 
   return (
