@@ -37,6 +37,20 @@ const songTitles = [
   'Mood', 'Industry Baby', 'Just Wanna Rock', 'Heat It Up', 'Super Freaky Girl', 'About Damn Time', 'First Class', 'Ghost', 'Enemy', 'Heat Waves',
 ];
 
+// Sample audio URLs for demo - using free public domain music
+const sampleAudioUrls = [
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
+];
+
 function getSongById(id: number) {
   const titleIndex = (id - 1) % songTitles.length;
   const artistIndex = (id - 1) % artistData.length;
@@ -57,7 +71,7 @@ function getSongById(id: number) {
     duration: 150 + ((id * 13) % 180),
     genre,
     coverUrl: `https://i.scdn.co/image/ab67616d0000b273${String((id * 7) % 999999999999).padStart(12, '0')}`,
-    audioUrl: '/music/sample.mp3',
+    audioUrl: sampleAudioUrls[(id - 1) % sampleAudioUrls.length],
     lyrics: null,
     plays: (id * 1234567) % 100000000,
     releaseDate: `${year}-01-01`,

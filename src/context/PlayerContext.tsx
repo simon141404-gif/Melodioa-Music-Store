@@ -3,6 +3,9 @@
 import React, { createContext, useContext, useState, useRef, useEffect, ReactNode, useCallback } from 'react';
 import { Song, QueueItem, RepeatMode } from '@/types';
 
+// Default sample audio for fallback
+const DEFAULT_AUDIO = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+
 interface PlayerContextType {
   currentSong: Song | null;
   isPlaying: boolean;
@@ -108,8 +111,9 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     setCurrentTime(0);
     
     if (audioRef.current) {
-      // Use a sample audio file for demo
-      audioRef.current.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+      // Use the song's audioUrl with fallback
+      audioRef.current.src = song.audioUrl || DEFAULT_AUDIO;
+      audioRef.current.load();
       audioRef.current.play().catch(console.error);
       setIsPlaying(true);
     }
