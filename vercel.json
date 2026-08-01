@@ -1,6 +1,10 @@
 {
   "buildCommand": "npx prisma generate && npx next build",
-  "installCommand": "npm install --legacy-peer-deps",
+  "installCommand": "npm install",
   "framework": "nextjs",
-  "devCommand": "npm run dev"
+  "build": {
+    "env": {
+      "NEXT_TELEMETRY_DISABLED": "1"
+    }
+  }
 }
